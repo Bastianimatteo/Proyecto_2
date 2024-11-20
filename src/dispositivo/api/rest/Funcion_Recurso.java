@@ -30,6 +30,7 @@ public class Funcion_Recurso extends Recurso {
 		try {
 			jsonResult.put("id", f.getId());
 			jsonResult.put("estado", f.getStatus());
+			jsonResult.put("habilitada", f.estaHabilitada());
 		} catch (JSONException e) {
 		}
 		return jsonResult;
@@ -76,9 +77,8 @@ public class Funcion_Recurso extends Recurso {
 		}
 
 		// Función encontrada
-		// TO-DO: Ejercicio 5 - Implementar funciones habilitar/deshabilitar
+		// Ejercicio 5 - Implementar funciones habilitar/deshabilitar
 
-		
 
 		// Construimos el mensaje de respuesta
 
