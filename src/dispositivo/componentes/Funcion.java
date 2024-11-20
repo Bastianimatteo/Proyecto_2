@@ -117,8 +117,7 @@ public class Funcion implements IFuncion {
 
 	@Override
 	public Boolean estaHabilitada() {
-		//return true; // TO-DO: Ejercicio 4
-
+		// Ejercicio 4
 		return this.habilitada;
 	}
 
