@@ -111,20 +111,12 @@ public class Dispositivo_Recurso extends Recurso {
 				// d.accion());
 				;
 				
-		// TO-DO: Ejercicio 5 - Implementar funciones habilitar/deshabilitar
-
-			// inizio codice mio
-
+			// Ejercicio 5 - Implementar funciones habilitar/deshabilitar
 			if (action.equalsIgnoreCase("habilitar")) {
-				d.setHabilitado(true);
+				d.habilita();
 			} else if (action.equalsIgnoreCase("deshabilitar")) {
-				d.setHabilitado(false);
-			}
-
-			//fine codice mio
-
-
-				else {
+				d.deshabilita();
+			} else {
 				MySimpleLogger.warn("Dispositivo-Recurso", "Acción '" + payload + "' no reconocida. Sólo admitidas: habilitar o deshabilitar");
 				this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
 			}

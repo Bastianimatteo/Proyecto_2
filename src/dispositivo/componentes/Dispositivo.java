@@ -104,30 +104,29 @@ public class Dispositivo implements IDispositivo {
 		return this;
 	}
 
-	//inizio codice mio
-
+	// Ejercicio 4
 	@Override
 	public Boolean estaHabilitado(){
 		return this.habilitado;
 	}
 
 	@Override 
-	public IDispositivo setHabilitado(boolean new_habilitado){
-		this.habilitado = new_habilitado;
-
-		if(new_habilitado == false){
-			for(IFuncion f : this.getFunciones()) {
-				f.setHabilitada(false);
-			}
-		}
-		else
-		{
-			for(IFuncion f : this.getFunciones()) {
-				f.setHabilitada(true);
-			}
+	public IDispositivo habilita(){
+		this.habilitado = true;
+		// Activate all functions
+		for(IFuncion f : this.getFunciones()) {
+			f.setHabilitada(true);
 		}
 		return this;
 	}
-	
-	// fine codice mio
+
+	@Override
+	public IDispositivo deshabilita(){
+		this.habilitado = false;
+		// Deactivate all functions
+		for(IFuncion f : this.getFunciones()) {
+			f.setHabilitada(false);
+		}
+		return this;
+	}
 }

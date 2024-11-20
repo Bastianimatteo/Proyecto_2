@@ -13,12 +13,8 @@ public interface IDispositivo {
 	public IFuncion getFuncion(String funcionId);
 	public Collection<IFuncion> getFunciones();
 
-	// TO-DO: Ejercicio 5 - Funciones habilitar/deshabilitar
-
-	//inizio codice mio
-	
+	// Ejercicio 5 - Funciones habilitar/deshabilitar
 	public Boolean estaHabilitado();
-	public IDispositivo setHabilitado(boolean new_habilitado);
-
-	// fine codice mio
+	public IDispositivo habilita();
+	public IDispositivo deshabilita();
 }
