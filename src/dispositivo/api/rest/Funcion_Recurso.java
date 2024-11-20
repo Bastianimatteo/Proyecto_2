@@ -53,7 +53,7 @@ public class Funcion_Recurso extends Recurso {
 		}
 		
 		// Construimos el mensaje de respuesta
-		// TO-DO: Ejercicio 3 - Codificar Mensaje estado de la función
+		// Ejercicio 3 - Codificar Mensaje estado de la función
 		// Hint : en esta clase se ha definido un método estático serialize que puede ser útil
     	JSONObject resultJSON = new JSONObject();
 		resultJSON = Funcion_Recurso.serialize(f);
@@ -78,38 +78,7 @@ public class Funcion_Recurso extends Recurso {
 		// Función encontrada
 		// TO-DO: Ejercicio 5 - Implementar funciones habilitar/deshabilitar
 
-		// inizio codice mio
-
-		// Dispositivo encontrado
-		JSONObject payload = null;
-		try { // legge il corpo della richiesta e recupera il campo accion
-			payload = new JSONObject(entity.getText());
-			String action = payload.getString("accion");
-			
-			if ( action.equalsIgnoreCase("<accion-permitida>") )
-				// d.accion());
-				;
-				
-		// TO-DO: Ejercicio 5 - Implementar funciones habilitar/deshabilitar
-
-			// inizio codice mio
-
-			if (action.equalsIgnoreCase("habilitar")) {
-				f.setHabilitada(true);
-			} 
-			else if (action.equalsIgnoreCase("deshabilitar")) {
-				f.setHabilitada(false);
-			}
-			else {
-			MySimpleLogger.warn("Dispositivo-Recurso", "Acción '" + payload + "' no reconocida. Sólo admitidas: habilitar o deshabilitar");
-			this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
-			}
-			
-		} catch (JSONException | IOException e) {
-			this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
-		}
-
-		//fine codice mio
+		
 
 		// Construimos el mensaje de respuesta
 
