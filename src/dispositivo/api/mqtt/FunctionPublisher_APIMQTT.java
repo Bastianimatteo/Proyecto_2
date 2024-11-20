@@ -1,4 +1,4 @@
-package dispositivo.api.iot.infraestructure;
+package dispositivo.api.mqtt;
 
 import java.util.UUID;
 
@@ -14,30 +14,32 @@ import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import dispositivo.api.iot.infraestructure.Dispositivo_RegistradorMQTT;
 import dispositivo.interfaces.Configuracion;
 import dispositivo.utils.MySimpleLogger;
 
-public class Dispositivo_RegistradorMQTT implements MqttCallback {
-
-	protected MqttClient myClient;
+/**
+ * This class is responsible for publishing the state of the functions of a device to an MQTT broker.
+ */
+public class FunctionPublisher_APIMQTT {
+    protected MqttClient myClient;
 	protected MqttConnectOptions connOpt;
 
 	protected String dispositivoId = null;
 	protected String dispositivoIP = null;
 	protected String mqttBroker = null;
-	
-	private String loggerId = null;
-	
-	
-	public static Dispositivo_RegistradorMQTT build(String dispositivoId, String dispositivoIP, String mqttBroker) {
-		Dispositivo_RegistradorMQTT reg = new Dispositivo_RegistradorMQTT();
+
+    private String loggerId = null;
+
+    public static FunctionPublisher_APIMQTT build(String dispositivoId, String dispositivoIP, String mqttBroker) {
+		FunctionPublisher_APIMQTT reg = new FunctionPublisher_APIMQTT();
 		reg.setDispositivoID(dispositivoId);
 		reg.setDispositivoIP(dispositivoIP);
 		reg.setBrokerURL(mqttBroker);
 		return reg;
 	}
 	
-	protected Dispositivo_RegistradorMQTT() {
+	protected FunctionPublisher_APIMQTT() {
 	}
 	
 	protected void setDispositivoID(String dispositivoID) {
@@ -52,38 +54,8 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 	protected void setBrokerURL(String brokerURL) {
 		this.mqttBroker = brokerURL;
 	}
-		
-	@Override
-	public void connectionLost(Throwable t) {
-		MySimpleLogger.warn(this.loggerId, "Connection lost!");
-		// code to reconnect to the broker would go here if desired
-	}
 
-	/**
-	 * 
-	 * deliveryComplete
-	 * This callback is invoked when a message published by this client
-	 * is successfully received by the broker.
-	 * 
-	 */
-	@Override
-	public void deliveryComplete(IMqttDeliveryToken token) {
-		//System.out.println("Pub complete" + new String(token.getMessage().getPayload()));
-	}
-
-	/**
-	 * 
-	 * messageArrived
-	 * This callback is invoked when a message is received on a subscribed topic.
-	 * 
-	 */
-	@Override
-	public void messageArrived(String topic, MqttMessage message) throws Exception {
-	}
-
-	
-
-	public void connect() {
+    public void connect() {
 
 		// setup MQTT Client
 		String clientID = this.dispositivoId + UUID.randomUUID().toString();
@@ -105,17 +77,15 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 			else
 				myClient = new MqttClient(this.mqttBroker, clientID);
 			
-			myClient.setCallback(this);
 			myClient.connect(connOpt);
 		} catch (MqttException e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
 		
-		MySimpleLogger.info(this.loggerId, "Conectado al broker " + this.mqttBroker);
+		MySimpleLogger.info(this.loggerId, "FuncionPublisher conectado al broker " + this.mqttBroker);
 
 	}
-	
 	
 	public void disconnect() {
 		// disconnect
@@ -125,59 +95,28 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void registrar() {
-		
-		if ( this.myClient == null || !this.myClient.isConnected() ) {
-			this.connect();
-		}
 
-		MqttTopic topic = myClient.getTopic(Configuracion.TOPIC_REGISTRO);
-
-
-		// M1 = 
-		JSONObject pubMsg = new JSONObject();
-		try {
-			pubMsg.put("dispositivo", this.dispositivoId);
-			pubMsg.put("ip", this.dispositivoIP);
-			pubMsg.put("accion", "registro");
-	   		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+    public void publish(String functionId, JSONObject message) {
+		String topic = Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivoId + "/funcion/" + functionId + "/info";
+		MqttTopic mqttTopic = myClient.getTopic(topic);
 		
    		int pubQoS = 0;
-		MqttMessage message = new MqttMessage(pubMsg.toString().getBytes());
-    	message.setQos(pubQoS);
-    	message.setRetained(false);
+		MqttMessage mqttMessage = new MqttMessage(message.toString().getBytes());
+    	mqttMessage.setQos(pubQoS);
+    	mqttMessage.setRetained(false);
 
     	// Publish the message
     	MySimpleLogger.debug(this.loggerId, "Publicando en topic \"" + topic + "\" qos " + pubQoS);
     	MqttDeliveryToken token = null;
     	try {
     		// publish message to broker
-			token = topic.publish(message);
-			MySimpleLogger.debug(this.loggerId, pubMsg.toString());
+			token = mqttTopic.publish(mqttMessage);
+			MySimpleLogger.debug(this.loggerId, mqttMessage.toString());
 	    	// Wait until the message has been delivered to the broker
 			token.waitForCompletion();
 			Thread.sleep(100);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	    		    	
-
-	}
-	
-	
-	
-	public void desregistrar() {
-
-		// ToDo
-
-
-	}
-	
-	
-	
+    }
 }

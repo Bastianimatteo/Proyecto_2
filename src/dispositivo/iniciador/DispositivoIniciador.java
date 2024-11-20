@@ -1,5 +1,6 @@
 package dispositivo.iniciador;
 
+import dispositivo.api.mqtt.FunctionPublisher_APIMQTT;
 import dispositivo.componentes.Dispositivo;
 import dispositivo.componentes.Funcion;
 import dispositivo.interfaces.FuncionStatus;
@@ -22,18 +23,20 @@ public class DispositivoIniciador {
 		String mqttBroker = args[3];
 		
 		IDispositivo d = Dispositivo.build(deviceId, deviceIP, Integer.valueOf(port), mqttBroker); // crea un oggetto "Dispositivo" che configura, ID, IP, porta API REST, URL del broker MQTT
-		
+		FunctionPublisher_APIMQTT funcionPublisher = FunctionPublisher_APIMQTT.build(deviceId, deviceIP, mqttBroker); // crea un oggetto "FunctionPublisher_APIMQTT" che configura l'ID del dispositivo, l'IP e l'URL del broker MQTT
+		funcionPublisher.connect(); // connette il publisher al broker MQTT
+
 		// Añadimos funciones al dispositivo
 
 		// crea 2 funzioni con stato iniziale OFF e associa ogni funzione al dispositivo con il metodo "addFuncion"
-		IFuncion f1 = Funcion.build("f1", FuncionStatus.OFF);
+		IFuncion f1 = Funcion.build("f1", FuncionStatus.OFF, funcionPublisher);
 		d.addFuncion(f1);
 		
-		IFuncion f2 = Funcion.build("f2", FuncionStatus.OFF);
+		IFuncion f2 = Funcion.build("f2", FuncionStatus.OFF, funcionPublisher);
 		d.addFuncion(f2);
 
 		// Ejercicio 1 - Añadir función f3
-		IFuncion f3 = Funcion.build("f3", FuncionStatus.BLINK);
+		IFuncion f3 = Funcion.build("f3", FuncionStatus.BLINK, funcionPublisher);
 		d.addFuncion(f3);
 
 		// Arrancamos el dispositivo

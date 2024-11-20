@@ -1,5 +1,8 @@
 package dispositivo.componentes;
 
+import org.json.JSONObject;
+
+import dispositivo.api.mqtt.FunctionPublisher_APIMQTT;
 import dispositivo.interfaces.FuncionStatus;
 import dispositivo.interfaces.IFuncion;
 import dispositivo.utils.MySimpleLogger;
@@ -13,21 +16,24 @@ public class Funcion implements IFuncion {
 	protected String id = null;
 	protected FuncionStatus initialStatus = null; // stato iniziale quando viene avviata con iniciar()
 	protected FuncionStatus status = null; //stato attuale della funzione
+
+	protected FunctionPublisher_APIMQTT publisher = null;
 	
 	private String loggerId = null;
 	
-	public static Funcion build(String id) { // crea una funzione con stato iniziale OFF
-		return new Funcion(id, FuncionStatus.OFF);
+	public static Funcion build(String id, FunctionPublisher_APIMQTT publisher) { // crea una funzione con stato iniziale OFF
+		return new Funcion(id, FuncionStatus.OFF, publisher);
 	}
 	
-	public static Funcion build(String id, FuncionStatus initialStatus) { // crea una funzione con uno stato iniziale specificato
-		return new Funcion(id, initialStatus);
+	public static Funcion build(String id,  FuncionStatus initialStatus, FunctionPublisher_APIMQTT publisher) { // crea una funzione con uno stato iniziale specificato
+		return new Funcion(id, initialStatus, publisher);
 	}
 
-	protected Funcion(String id, FuncionStatus initialStatus) { // costruttore, inizializza ID, stato iniziale, ID per il logger
+	protected Funcion(String id, FuncionStatus initialStatus, FunctionPublisher_APIMQTT publisher) { // costruttore, inizializza ID, stato iniziale, ID per il logger
 		this.id = id;
 		this.initialStatus = initialStatus;
 		this.loggerId = "Funcion " + id;
+		this.publisher = publisher;
 	}
 	
 	
@@ -44,7 +50,8 @@ public class Funcion implements IFuncion {
 		}
 		MySimpleLogger.info(this.loggerId, "==> Encender");
 		this.setStatus(FuncionStatus.ON);
-		// TO-DO: Ejercicio 9 - Publicar estado de Funcion (publishStatusChange())
+		// Ejercicio 9 - Publicar estado de Funcion (publishStatusChange())
+		publishStatusChange();
 		return this;
 	}
 
@@ -56,7 +63,8 @@ public class Funcion implements IFuncion {
 		}
 		MySimpleLogger.info(this.loggerId, "==> Apagar");
 		this.setStatus(FuncionStatus.OFF);
-		// TO-DO: Ejercicio 9 - Publicar estado de Funcion (publishStatusChange())
+		// Ejercicio 9 - Publicar estado de Funcion (publishStatusChange())
+		publishStatusChange();
 		return this;
 	}
 
@@ -68,7 +76,8 @@ public class Funcion implements IFuncion {
 		}
 		MySimpleLogger.info(this.loggerId, "==> Parpadear");
 		this.setStatus(FuncionStatus.BLINK);
-		// TO-DO: Ejercicio 9 - Publicar estado de Funcion (publishStatusChange())
+		// Ejercicio 9 - Publicar estado de Funcion (publishStatusChange())
+		publishStatusChange();
 		return this;
 	}
 	
@@ -124,12 +133,14 @@ public class Funcion implements IFuncion {
 	@Override
 	public IFuncion habilita(){
 		this.habilitada = true;
+		publishStatusChange();
 		return this;
 	}
 
 	@Override
 	public IFuncion deshabilita(){
 		this.habilitada = false;
+		publishStatusChange();
 		return this;
 	}
 
@@ -137,8 +148,16 @@ public class Funcion implements IFuncion {
 
 
 	protected void publishStatusChange() { // notifica push quando lo stato della funziona cambia
-		
-		// TO-DO: Ejercicio 9 - Implementar notificaciones 'push'
-
+		// Ejercicio 9 - Implementar notificaciones 'push'
+		JSONObject message = new JSONObject();
+		try{
+			message.put("estado", this.status.toString());
+			message.put("habilitada", this.estaHabilitada());
+		} catch (Exception e) {
+			MySimpleLogger.error(this.loggerId, "Error al publicar estado de Funcion");
+		}
+		if ( this.publisher != null ) {
+			this.publisher.publish(this.id, message);
+		}
 	}
 }

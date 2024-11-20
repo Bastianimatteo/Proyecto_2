@@ -125,7 +125,6 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 
 	}
 	
-	
 	public void disconnect() { // disconnette il client dal broker
 		
 		// disconnect
@@ -140,7 +139,6 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 
 		
 	}
-
 	
 	protected void subscribe(String myTopic) { // sottoscrive il client ad un determinato topic
 		
@@ -155,7 +153,6 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		
 	}
 	
-
 	protected void unsubscribe(String myTopic) { // annulla la sottoscrizione del client ad un determinato topic
 		
 		// unsubscribe to topic
@@ -185,16 +182,13 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 
 		// fine codice mio
 	}
-	
-	
-	
+
 	public void detener() {
 		
 		
 		// To-Do
 		
 	}
-	
 	
 	protected String calculateCommandTopic(IFuncion f) {
 		return Configuracion.TOPIC_BASE + "dispositivo/" + dispositivo.getId() + "/funcion/" + f.getId() + "/comandos";

@@ -1,5 +1,7 @@
 package dispositivo.interfaces;
 
+import dispositivo.api.mqtt.FunctionPublisher_APIMQTT;
+
 public interface IFuncion {
 	
 	public String getId();
