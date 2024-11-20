@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "dispositivo/dispositivo.iniciador.DispositivoIniciador",
             "projectName": "dispositivo",
-            "args": ["ttmi050", "ttmi050.iot.ups.es", "8182", "tcp://tambori.dsic.upv.es:10083"]
+            "args": ["ttmi050", "ttmi050.iot.upv.es", "8182", "tcp://tambori.dsic.upv.es:10083"]
         }
     ]
 }
