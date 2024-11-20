@@ -55,36 +55,11 @@ public class Dispositivo_Recurso extends Recurso {
 		IDispositivo d = this.getDispositivo();
 
 		// Construimos el mensaje de respuesta
-		// TO-DO: Ejercicio 2 - Codificar Mensaje respuesta API
+		// Ejercicio 2 - Codificar Mensaje respuesta API
 		// Hint : en esta clase se ha definido un método estático serialize que puede ser útil
     	JSONObject resultJSON = new JSONObject();
 
-		//inizio codice mio
-
-		try {
-			// Aggiunge l'ID del dispositivo
-			resultJSON.put("id", d.getId());
-			
-			// Aggiunge lo stato di abilitazione (assumendo che 'getHabilitado()' restituisca true/false)
-			resultJSON.put("habilitado", d.estaHabilitado());
-			
-			// Aggiunge le funzioni e i loro stati
-			JSONArray funcionesArray = new JSONArray();
-			for (IFuncion funcion : d.getFunciones()) {
-				JSONObject funcionJSON = new JSONObject();
-				funcionJSON.put("id", funcion.getId());
-				funcionJSON.put("estado", funcion.getStatus().name()); // Stato come stringa (ON, OFF, BLINK)
-				funcionesArray.put(funcionJSON);
-			}
-			resultJSON.put("funciones", funcionesArray);
-	
-		} catch (JSONException e) {
-			// Logga l'errore e restituisce un errore 500
-			MySimpleLogger.error("Dispositivo_Recurso", "Error generando el JSON: " + e.getMessage());
-			return generateResponseWithErrorCode(Status.SERVER_ERROR_INTERNAL);
-		}
-	
-		//fine codice mio
+		resultJSON = Dispositivo_Recurso.serialize(d);
     	
 		// Si todo va bien, devolvemos el resultado calculado
     	this.setStatus(Status.SUCCESS_OK);
@@ -133,9 +108,6 @@ public class Dispositivo_Recurso extends Recurso {
         return new StringRepresentation(resultJSON.toString(), MediaType.APPLICATION_JSON);
 
 	}
-    
-    
-    
     
 	@Options
 	public void describe() {
