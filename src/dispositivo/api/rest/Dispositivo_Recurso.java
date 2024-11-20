@@ -36,6 +36,7 @@ public class Dispositivo_Recurso extends Recurso {
 				}
 
 				jsonResult.put("funciones", arrayFunciones);
+				jsonResult.put("habilitado", dispositivo.estaHabilitado());
 			}
 
 		} catch (JSONException e) {
