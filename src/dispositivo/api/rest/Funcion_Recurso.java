@@ -100,6 +100,9 @@ public class Funcion_Recurso extends Recurso {
 			case "apagar":
 				f.apagar();
 				break;
+			case "parpadear":
+				f.parpadear();
+				break;
 			default:
 				MySimpleLogger.warn("Dispositivo-Recurso", "Acción '" + payload + "' no reconocida. Sólo admitidas: habilitar o deshabilitar");
 				return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
