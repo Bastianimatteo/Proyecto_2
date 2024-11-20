@@ -92,6 +92,20 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 		connOpt.setCleanSession(true);
 		connOpt.setKeepAliveInterval(30);
 
+		// Configure Last Will and Testament
+		String lwtTopic = Configuracion.TOPIC_REGISTRO;
+		JSONObject lwJsonObject = new JSONObject();
+		try {
+			lwJsonObject.put("dispositivo", this.dispositivoId);
+			lwJsonObject.put("ip", this.dispositivoIP);
+			lwJsonObject.put("accion", "registro");
+			lwJsonObject.put("status", "offline");
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		connOpt.setWill(lwtTopic, lwJsonObject.toString().getBytes(), 0, false);
+
 		// Connect to Broker
 		try {
 			
@@ -128,20 +142,17 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 	
 	
 	public void registrar() {
-		
 		if ( this.myClient == null || !this.myClient.isConnected() ) {
 			this.connect();
 		}
 
 		MqttTopic topic = myClient.getTopic(Configuracion.TOPIC_REGISTRO);
-
-
-		// M1 = 
 		JSONObject pubMsg = new JSONObject();
 		try {
 			pubMsg.put("dispositivo", this.dispositivoId);
 			pubMsg.put("ip", this.dispositivoIP);
 			pubMsg.put("accion", "registro");
+			pubMsg.put("status", "online");
 	   		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -165,19 +176,8 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	    		    	
-
 	}
-	
-	
 	
 	public void desregistrar() {
-
-		// ToDo
-
-
 	}
-	
-	
-	
 }
