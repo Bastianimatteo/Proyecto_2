@@ -86,7 +86,6 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		String[] topicNiveles = topic.split("/");
 		String funcionId = topicNiveles[topicNiveles.length-2];
 		
-		
 		IFuncion f = this.dispositivo.getFuncion(funcionId);
 		if ( f == null ) {
 			MySimpleLogger.warn(this.loggerId, "No encontrada funcion " + funcionId);
@@ -97,55 +96,28 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		// Definimos una API con mensajes de acciones básicos
 		//
 
-		// TO-DO: Ejercicio 7 - Codificar mensajes en JSON
-
+		// Ejercicio 7 - Codificar mensajes en JSON
+		JSONObject jsonPayload = new JSONObject(message.getPayload());
+		String accion = jsonPayload.getString("accion");
+		
+		switch (accion) {
+			/**
+			case "encender":
+				f.encender();
+				break;
+			case "apagar":
+				f.apagar();
+				break;
+			case "parpadear":
+				f.parpadear();
+				break;		*/
+			default:
+				MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
+				break;
+		}
 		
 		// TO-DO: Ejercicio 8 - Extender API para habilitar/deshabilitar dispositivo (y sus funciones)
 
-		// inizio codice mio esercizio 7 e 8
-
-		// si suppone che venga mandato un messaggio JSON tipo {"accion": "encender"}
-
-		JSONObject payload2 = null;			
-		
-		payload2 = new JSONObject(message.getPayload());
-		String accion = payload2.getString("accion");
-			
-		if(accion.equalsIgnoreCase("encender")){
-			f.encender();
-		} 
-		else if ( accion.equalsIgnoreCase("apagar") ) {
-			f.apagar();
-		} 
-		else if ( accion.equalsIgnoreCase("parpadear") ) {
-			f.parpadear();
-		} 
-		else if ( accion.equalsIgnoreCase("habilitar") ) {
-			dispositivo.habilita();
-		} 
-		else if ( accion.equalsIgnoreCase("deshabilitar") ) {
-			dispositivo.deshabilita();
-		} 
-		else {
-			MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
-		}
-
-		// fine codice mio esercizio 7 e 8
-
-		/* inizio commento mio
-		if ( payload.equalsIgnoreCase("encender") ) {
-			f.encender();
-		} else if ( payload.equalsIgnoreCase("apagar") ) {
-			f.apagar();
-		} else if ( payload.equalsIgnoreCase("parpadear") ) {
-			f.parpadear();
-		} else {
-			MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
-		}
-
-		fine commento mio
-		*/
-		
 	}
 
 	/**
