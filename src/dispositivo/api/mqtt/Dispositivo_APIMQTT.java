@@ -99,9 +99,13 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 
 		// TO-DO: Ejercicio 7 - Codificar mensajes en JSON
 
-		// inizio codice mio
-		// si suppone che venga mandato un messaggio JSON tipo {"accion": "encender"}
 		
+		// TO-DO: Ejercicio 8 - Extender API para habilitar/deshabilitar dispositivo (y sus funciones)
+
+		// inizio codice mio esercizio 7 e 8
+
+		// si suppone che venga mandato un messaggio JSON tipo {"accion": "encender"}
+
 		JSONObject payload2 = null;			
 		
 		payload2 = new JSONObject(message.getPayload());
@@ -116,13 +120,17 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		else if ( accion.equalsIgnoreCase("parpadear") ) {
 			f.parpadear();
 		} 
+		else if ( accion.equalsIgnoreCase("habilitar") ) {
+			dispositivo.habilita();
+		} 
+		else if ( accion.equalsIgnoreCase("deshabilitar") ) {
+			dispositivo.deshabilita();
+		} 
 		else {
 			MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
 		}
 
-		// fine codice mio
-
-		// TO-DO: Ejercicio 8 - Extender API para habilitar/deshabilitar dispositivo (y sus funciones)
+		// fine codice mio esercizio 7 e 8
 
 		/* inizio commento mio
 		if ( payload.equalsIgnoreCase("encender") ) {
@@ -237,6 +245,11 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		for(IFuncion f : this.dispositivo.getFunciones())
 			this.subscribe(this.calculateCommandTopic(f)); // calculateCommandTopic(f) è un metodo per calcolare i topic dei comandi per ciascuna funzione
 
+		// inizio codice mio: sottoscrizione al topic dispositivo/{ID}/comandos
+		String dispositivoComandosTopic = Configuracion.TOPIC_BASE + "dispositivo/" + dispositivo.getId() + "/comandos";
+		this.subscribe(dispositivoComandosTopic);
+
+		// fine codice mio
 	}
 	
 	
