@@ -56,20 +56,7 @@ public class Funcion_Recurso extends Recurso {
 		// TO-DO: Ejercicio 3 - Codificar Mensaje estado de la función
 		// Hint : en esta clase se ha definido un método estático serialize que puede ser útil
     	JSONObject resultJSON = new JSONObject();
-
-		// inizio codice mio
-
-		try {
-			resultJSON.put("id", f.getId());
-			resultJSON.put("estado", f.getStatus());
-		}
-		catch(JSONException e){
-			// Logga l'errore e restituisce un errore 500
-			MySimpleLogger.error("Funcion_Recurso", "Error generando el JSON: " + e.getMessage());
-			return generateResponseWithErrorCode(Status.SERVER_ERROR_INTERNAL);
-		}
-
-		// fine codice mio
+		resultJSON = Funcion_Recurso.serialize(f);
 		
 		// Si todo va bien, devolvemos el resultado calculado
     	this.setStatus(Status.SUCCESS_OK);
