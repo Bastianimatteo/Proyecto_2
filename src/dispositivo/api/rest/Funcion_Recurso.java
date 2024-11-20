@@ -88,12 +88,6 @@ public class Funcion_Recurso extends Recurso {
 		// Función encontrada
 		// Ejercicio 5 - Implementar funciones habilitar/deshabilitar
 		switch (accion) {
-			case "habilitar":
-				f.habilita();
-				break;
-			case "deshabilitar":
-				f.deshabilita();
-				break;
 			case "encender":
 				f.encender();
 				break;
