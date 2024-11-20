@@ -23,7 +23,7 @@ public class Funcion_Recurso extends Recurso {
 	
 	
 	public static final String ID = "FUNCION-ID";
-	public static final String RUTA = Dispositivo_Recurso.RUTA + "/funcion/{" + Funcion_Recurso.ID + "}";
+	public static final String RUTA = Dispositivo_Recurso.RUTA + "/funcion/{" + Funcion_Recurso.ID + "}"; // endpoint
 
 	public static JSONObject serialize(IFuncion f) {
 		JSONObject jsonResult = new JSONObject();
