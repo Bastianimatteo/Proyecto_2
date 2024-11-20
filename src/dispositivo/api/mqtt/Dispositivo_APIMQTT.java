@@ -1,5 +1,6 @@
 package dispositivo.api.mqtt;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -9,6 +10,9 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.restlet.data.Status;
 
 import dispositivo.interfaces.Configuracion;
 import dispositivo.interfaces.IDispositivo;
@@ -69,6 +73,7 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		System.out.println("| Message: " + payload);
 		System.out.println("-------------------------------------------------");
 		
+	
 		// DO SOME MAGIC HERE!
 		
 		//
@@ -81,12 +86,12 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		String[] topicNiveles = topic.split("/");
 		String funcionId = topicNiveles[topicNiveles.length-2];
 		
+		
 		IFuncion f = this.dispositivo.getFuncion(funcionId);
 		if ( f == null ) {
 			MySimpleLogger.warn(this.loggerId, "No encontrada funcion " + funcionId);
 			return;
 		}
-		
 		
 		//
 		// Definimos una API con mensajes de acciones básicos
@@ -94,8 +99,32 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 
 		// TO-DO: Ejercicio 7 - Codificar mensajes en JSON
 
+		// inizio codice mio
+		// si suppone che venga mandato un messaggio JSON tipo {"accion": "encender"}
+		
+		JSONObject payload2 = null;			
+		
+		payload2 = new JSONObject(message.getPayload());
+		String accion = payload2.getString("accion");
+			
+		if(accion.equalsIgnoreCase("encender")){
+			f.encender();
+		} 
+		else if ( accion.equalsIgnoreCase("apagar") ) {
+			f.apagar();
+		} 
+		else if ( accion.equalsIgnoreCase("parpadear") ) {
+			f.parpadear();
+		} 
+		else {
+			MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
+		}
+
+		// fine codice mio
+
 		// TO-DO: Ejercicio 8 - Extender API para habilitar/deshabilitar dispositivo (y sus funciones)
 
+		/* inizio commento mio
 		if ( payload.equalsIgnoreCase("encender") ) {
 			f.encender();
 		} else if ( payload.equalsIgnoreCase("apagar") ) {
@@ -106,7 +135,8 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 			MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
 		}
 
-		
+		fine commento mio
+		*/
 		
 	}
 
