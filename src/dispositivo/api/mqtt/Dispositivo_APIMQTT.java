@@ -1,6 +1,5 @@
 package dispositivo.api.mqtt;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -12,7 +11,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.restlet.data.Status;
 
 import dispositivo.interfaces.Configuracion;
 import dispositivo.interfaces.IDispositivo;
