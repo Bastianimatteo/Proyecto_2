@@ -78,27 +78,26 @@ public class Dispositivo_Recurso extends Recurso {
 		}
 
 		// Dispositivo encontrado
-		JSONObject payload = null;
+		JSONObject payload;
+		String accion;
 		try { // legge il corpo della richiesta e recupera il campo accion
-			payload = new JSONObject(entity.getText());
-			String action = payload.getString("accion");
-			
-			if ( action.equalsIgnoreCase("<accion-permitida>") )
-				// d.accion());
-				;
-				
-			// Ejercicio 5 - Implementar funciones habilitar/deshabilitar
-			if (action.equalsIgnoreCase("habilitar")) {
-				d.habilita();
-			} else if (action.equalsIgnoreCase("deshabilitar")) {
-				d.deshabilita();
-			} else {
-				MySimpleLogger.warn("Dispositivo-Recurso", "Acción '" + payload + "' no reconocida. Sólo admitidas: habilitar o deshabilitar");
-				this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
-			}
-			
+			payload = new JSONObject(entity.getText());	
+			accion = payload.getString("accion");		
 		} catch (JSONException | IOException e) {
-			this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
+			return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+
+		// Ejercicio 5 - Implementar funciones habilitar/deshabilitar
+		switch (accion) {
+			case "habilitar":
+				d.habilita();
+				break;
+			case "deshabilitar":
+				d.deshabilita();
+				break;
+			default:
+				MySimpleLogger.warn("Dispositivo-Recurso", "Acción '" + payload + "' no reconocida. Sólo admitidas: habilitar o deshabilitar");
+				return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		
 		// Construimos el mensaje de respuesta

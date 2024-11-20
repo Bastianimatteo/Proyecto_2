@@ -123,8 +123,14 @@ public class Funcion implements IFuncion {
 	}
 
 	@Override
-	public IFuncion setHabilitada(boolean new_habilitada){
-		this.habilitada = new_habilitada;
+	public IFuncion habilita(){
+		this.habilitada = true;
+		return this;
+	}
+
+	@Override
+	public IFuncion deshabilita(){
+		this.habilitada = false;
 		return this;
 	}
 

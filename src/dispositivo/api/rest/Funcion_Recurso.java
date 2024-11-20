@@ -76,9 +76,34 @@ public class Funcion_Recurso extends Recurso {
 			return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_NOT_FOUND);
 		}
 
+		JSONObject payload;
+		String accion;
+		try { // legge il corpo della richiesta e recupera il campo accion
+			payload = new JSONObject(entity.getText());	
+			accion = payload.getString("accion");		
+		} catch (JSONException | IOException e) {
+			return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
+
 		// Función encontrada
 		// Ejercicio 5 - Implementar funciones habilitar/deshabilitar
-
+		switch (accion) {
+			case "habilitar":
+				f.habilita();
+				break;
+			case "deshabilitar":
+				f.deshabilita();
+				break;
+			case "encender":
+				f.encender();
+				break;
+			case "apagar":
+				f.apagar();
+				break;
+			default:
+				MySimpleLogger.warn("Dispositivo-Recurso", "Acción '" + payload + "' no reconocida. Sólo admitidas: habilitar o deshabilitar");
+				return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
 
 		// Construimos el mensaje de respuesta
 

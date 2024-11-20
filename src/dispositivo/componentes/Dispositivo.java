@@ -115,7 +115,7 @@ public class Dispositivo implements IDispositivo {
 		this.habilitado = true;
 		// Activate all functions
 		for(IFuncion f : this.getFunciones()) {
-			f.setHabilitada(true);
+			f.habilita();
 		}
 		return this;
 	}
@@ -125,7 +125,7 @@ public class Dispositivo implements IDispositivo {
 		this.habilitado = false;
 		// Deactivate all functions
 		for(IFuncion f : this.getFunciones()) {
-			f.setHabilitada(false);
+			f.deshabilita();
 		}
 		return this;
 	}

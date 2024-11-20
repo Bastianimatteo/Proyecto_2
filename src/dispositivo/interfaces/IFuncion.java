@@ -13,12 +13,10 @@ public interface IFuncion {
 	
 	public FuncionStatus getStatus();
 
-	// TO-DO: Ejercicio 5 - Funciones habilitar/deshabilitar
-
-	// inizio codice mio
-
+	// Ejercicio 5 - Funciones habilitar/deshabilitar
 	public Boolean estaHabilitada();
-	public IFuncion setHabilitada(boolean new_habilitada);
+	public IFuncion habilita();
+	public IFuncion deshabilita();
 
 	// fine codice mio
 
