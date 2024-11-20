@@ -97,11 +97,16 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		//
 
 		// Ejercicio 7 - Codificar mensajes en JSON
-		JSONObject jsonPayload = new JSONObject(message.getPayload());
-		String accion = jsonPayload.getString("accion");
-		
+		JSONObject jsonPayload = new JSONObject(payload);
+		String accion;
+		try{
+			accion = jsonPayload.getString("accion");
+		}catch(JSONException e){
+			MySimpleLogger.warn(this.loggerId, "No se ha podido obtener la acción del mensaje");
+			return;
+		}
+
 		switch (accion) {
-			/**
 			case "encender":
 				f.encender();
 				break;
@@ -110,7 +115,7 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 				break;
 			case "parpadear":
 				f.parpadear();
-				break;		*/
+				break;
 			default:
 				MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
 				break;
