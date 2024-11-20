@@ -1,7 +1,4 @@
 {
-    // Usare IntelliSense per informazioni sui possibili attributi.
-    // Al passaggio del mouse vengono visualizzate le descrizioni degli attributi esistenti.
-    // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -12,11 +9,19 @@
         },
         {
             "type": "java",
-            "name": "MiDispositivo-IoT",
+            "name": "Dispositivo 50",
             "request": "launch",
             "mainClass": "dispositivo/dispositivo.iniciador.DispositivoIniciador",
             "projectName": "dispositivo",
             "args": ["ttmi050", "ttmi050.iot.upv.es", "8182", "tcp://tambori.dsic.upv.es:10083"]
+        },
+        {
+            "type": "java",
+            "name": "Dispositivo 51",
+            "request": "launch",
+            "mainClass": "dispositivo/dispositivo.iniciador.DispositivoIniciador",
+            "projectName": "dispositivo",
+            "args": ["ttmi051", "ttmi051.iot.upv.es", "8182", "tcp://tambori.dsic.upv.es:10083"]
         }
     ]
 }
