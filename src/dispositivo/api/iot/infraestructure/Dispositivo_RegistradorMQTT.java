@@ -84,8 +84,6 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 	
 
 	public void connect() {
-
-		// setup MQTT Client
 		String clientID = this.dispositivoId + UUID.randomUUID().toString();
 		connOpt = new MqttConnectOptions();
 		
