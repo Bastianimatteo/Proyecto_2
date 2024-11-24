@@ -21,6 +21,9 @@ public class Dispositivo implements IDispositivo {
 	protected Dispositivo_RegistradorMQTT registrador = null; // oggetto che si occupa di registrare il dispositivo con un sistema MQTT
 	protected Dispositivo_APIMQTT apiFuncionesMQTT = null; // interfaccia MQTT per gestire le funzioni del dispositivo
 	protected Dispositivo_APIREST apiFuncionesREST = null; // interfaccia REST per gestire le funzioni del dispositivo
+
+	protected boolean slave = false;
+	protected String masterId = null;
 	
 	
 	public static Dispositivo build(String deviceId, String ip, String mqttBrokerURL) { // crea un dispositivo con ID, IP, URL del broker MQTT e inizializza le 3 cose in verde
@@ -39,6 +42,17 @@ public class Dispositivo implements IDispositivo {
 		return dispositivo;
 	}
 
+	// It would have been better to create a separate class for a slave device since the behavior is different, but I will keep it this way for simplicity since is just a small project
+	public static Dispositivo build(String deviceId, String ip, int port, String mqttBrokerURL, String masterId) { // variante che consente di specificare il master da copiare
+		Dispositivo dispositivo = new Dispositivo(deviceId);
+		dispositivo.registrador = Dispositivo_RegistradorMQTT.build(deviceId, ip, mqttBrokerURL);
+		dispositivo.apiFuncionesMQTT = Dispositivo_APIMQTT.build(dispositivo, mqttBrokerURL);
+		dispositivo.apiFuncionesREST = Dispositivo_APIREST.build(dispositivo, port);
+		dispositivo.slave = true;
+		dispositivo.masterId = masterId;
+		return dispositivo;
+	}
+
 	protected Dispositivo(String deviceId) { //costruttore che inizializza l'ID del dispositivo
 		this.deviceId = deviceId;
 	}
@@ -46,6 +60,18 @@ public class Dispositivo implements IDispositivo {
 	@Override
 	public String getId() { // restituisce l'ID del dispositivo
 		return this.deviceId;
+	}
+
+	@Override
+	public String getMasterId() throws Exception { // restituisce l'ID del master del dispositivo
+		if ( !this.slave )
+			throw new Exception("This device is not a slave");
+		return this.masterId;
+	}
+
+	@Override
+	public Boolean isSlave() { // restituisce true se il dispositivo è uno slave
+		return this.slave;
 	}
 
 	protected Map<String, IFuncion> getFunctions() { // restituisce la mappa delle funzioni del dispositivo
@@ -88,7 +114,11 @@ public class Dispositivo implements IDispositivo {
 		}
 
 		this.registrador.registrar();
-		this.apiFuncionesMQTT.iniciar(); // avvia il client MQTT
+		// If the device is a slave it will subscribe to the master's f1/info topic, else it will start as a normal device
+		if(this.slave)
+			this.apiFuncionesMQTT.iniciarSlave();
+		else
+			this.apiFuncionesMQTT.iniciar(); // avvia il client MQTT
 		this.apiFuncionesREST.iniciar(); // avvia il server REST
 		return this;
 	}

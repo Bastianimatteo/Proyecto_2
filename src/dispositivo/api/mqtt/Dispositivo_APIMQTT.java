@@ -72,12 +72,16 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		System.out.println("-------------------------------------------------");
 
 		// Fede: Here detect if a message is on device topic or function topic and call the right handler
-		if(topic.contains("funcion"))
-			// Ejercicio 7 - Codificar mensajes en JSON
-			handleFunctionCommand(topic, payload);
-		else 
-		    // Ejercicio 8 - Extender API para habilitar/deshabilitar dispositivo (y sus funciones)
-			handleDeviceCommand(topic, payload);
+		if(this.dispositivo.isSlave())
+			handleFunctionCommandSlave(topic, payload);
+		else{
+			if(topic.contains("funcion"))
+				// Ejercicio 7 - Codificar mensajes en JSON
+				handleFunctionCommand(topic, payload);
+			else 
+				// Ejercicio 8 - Extender API para habilitar/deshabilitar dispositivo (y sus funciones)
+				handleDeviceCommand(topic, payload);
+		}
 	}
 
 	/**
@@ -181,6 +185,22 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		// fine codice mio
 	}
 
+	public void iniciarSlave(){
+		if ( this.myClient == null || !this.myClient.isConnected() )
+			this.connect();
+		
+		if ( this.dispositivo == null )
+			return;
+
+		try {
+			this.subscribe(Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivo.getMasterId() + "/funcion/f1/info");
+			this.subscribe(Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivo.getMasterId() + "/funcion/f2/info");
+			this.subscribe(Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivo.getMasterId() + "/funcion/f3/info");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void detener() {
 		
 		
@@ -254,6 +274,45 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 				f.apagar();
 				break;
 			case "parpadear":
+				f.parpadear();
+				break;
+			default:
+				MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
+				break;
+		}
+	}
+
+	private void handleFunctionCommandSlave(String topic, String payload){
+		String[] topicNiveles = topic.split("/");
+		String funcionId = topicNiveles[topicNiveles.length-2];
+		
+		IFuncion f = this.dispositivo.getFuncion(funcionId);
+		if ( f == null ) {
+			MySimpleLogger.warn(this.loggerId, "No encontrada funcion " + funcionId);
+			return;
+		}
+		
+		//
+		// Definimos una API con mensajes de acciones básicos
+		//
+		JSONObject jsonPayload;
+		String accion;
+		try{
+			jsonPayload = new JSONObject(payload);
+			accion = jsonPayload.getString("estado");
+		}catch(JSONException e){
+			MySimpleLogger.warn(this.loggerId, "No se ha podido obtener la acción del mensaje");
+			return;
+		}
+
+		switch (accion) {
+			case "ON":
+				f.encender();
+				break;
+			case "OFF":
+				f.apagar();
+				break;
+			case "BLINK":
 				f.parpadear();
 				break;
 			default:

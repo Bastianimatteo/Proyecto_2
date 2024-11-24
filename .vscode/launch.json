@@ -25,11 +25,20 @@
         },
         {
             "type": "java",
+            "name": "Dispositivo 51 - Slave on 50",
+            "request": "launch",
+            "mainClass": "dispositivo/dispositivo.iniciador.DispositivoIniciador",
+            "projectName": "dispositivo",
+            "args": ["ttmi051", "ttmi051.iot.upv.es", "8183", "tcp://tambori.dsic.upv.es:10083", "ttmi050"]
+        },
+        {
+            "type": "java",
             "name": "Controlador",
             "request": "launch",
             "mainClass": "dispositivo/dispositivo.controlador.Controlador",
             "projectName": "dispositivo",
             "args": ["tcp://tambori.dsic.upv.es:10083"]
         }
+        // TODO: Add slave config
     ]
 }

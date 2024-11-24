@@ -21,8 +21,17 @@ public class DispositivoIniciador {
 		String deviceIP = args[1];
 		String port = args[2];
 		String mqttBroker = args[3];
-		
-		IDispositivo d = Dispositivo.build(deviceId, deviceIP, Integer.valueOf(port), mqttBroker); // crea un oggetto "Dispositivo" che configura, ID, IP, porta API REST, URL del broker MQTT
+
+		IDispositivo d;
+
+		if (args.length > 4) {
+			// Create device as a salve
+			String masterId = args[4];
+			d = Dispositivo.build(deviceId, deviceIP, Integer.valueOf(port), mqttBroker, masterId);
+		} else {
+			d = Dispositivo.build(deviceId, deviceIP, Integer.valueOf(port), mqttBroker);
+		}
+
 		FunctionPublisher_APIMQTT funcionPublisher = FunctionPublisher_APIMQTT.build(deviceId, deviceIP, mqttBroker); // crea un oggetto "FunctionPublisher_APIMQTT" che configura l'ID del dispositivo, l'IP e l'URL del broker MQTT
 		funcionPublisher.connect(); // connette il publisher al broker MQTT
 
@@ -41,6 +50,5 @@ public class DispositivoIniciador {
 
 		// Arrancamos el dispositivo
 		d.iniciar();
-}
-
+	}
 }

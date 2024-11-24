@@ -17,4 +17,8 @@ public interface IDispositivo {
 	public Boolean estaHabilitado();
 	public IDispositivo habilita();
 	public IDispositivo deshabilita();
+
+	// Returns the master ID of the device, throws an exception if the device is not a slave
+	public String getMasterId() throws Exception;
+	public Boolean isSlave();
 }
