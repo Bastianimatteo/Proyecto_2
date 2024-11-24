@@ -106,13 +106,13 @@ public class Funcion implements IFuncion {
 		return this.status;
 	}
 	
-	protected IFuncion setStatus(FuncionStatus status) { // imposta il valore di status con il nuovo stato e restiuisce l'istanza corrente della funzione
+	protected IFuncion setStatus(FuncionStatus status) { // imposta il valore di status con il nuovo stato
 		this.status = status;
 		return this;
 	}
 	
 	@Override
-	public IFuncion iniciar() { // avvia la funzione, impostandola nello stato "initialStatus" tramite la funzione "putIntoInitiaStatus" che è descritta sopra
+	public IFuncion iniciar() { // avvia la funzione, impostandola nello stato "initialStatus" tramite la funzione "putIntoInitialStatus" che è descritta sopra
 		this._putIntoInitialStatus();
 		return this;
 	}

@@ -45,7 +45,7 @@ public class Dispositivo_Recurso extends Recurso {
 		return jsonResult;
 	}
 	
-	public IDispositivo getDispositivo() { // recupera un'istanza di IDispositivo dalla classe principale dell'applicazione Recurso.java
+	public IDispositivo getDispositivo() {
 		return this.getDispositivo_RESTApplication().getDispositivo();
 	}
 

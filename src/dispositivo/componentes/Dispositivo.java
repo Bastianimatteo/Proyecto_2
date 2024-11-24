@@ -82,14 +82,14 @@ public class Dispositivo implements IDispositivo {
 	
 		
 	@Override
-	public IDispositivo iniciar() { // avvia tutte le funzioni associate, registra il dispositivo tramite MQTT, avvia le interfacce MQTT e REST
+	public IDispositivo iniciar() { // avvia tutte le funzioni del dispositivo, registra il dispositivo tramite MQTT, avvia le interfacce MQTT e REST
 		for(IFuncion f : this.getFunciones()) {
 			f.iniciar();
 		}
 
 		this.registrador.registrar();
-		this.apiFuncionesMQTT.iniciar();
-		this.apiFuncionesREST.iniciar();
+		this.apiFuncionesMQTT.iniciar(); // avvia il client MQTT
+		this.apiFuncionesREST.iniciar(); // avvia il server REST
 		return this;
 	}
 
