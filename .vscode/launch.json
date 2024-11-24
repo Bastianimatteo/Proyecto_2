@@ -22,6 +22,14 @@
             "mainClass": "dispositivo/dispositivo.iniciador.DispositivoIniciador",
             "projectName": "dispositivo",
             "args": ["ttmi051", "ttmi051.iot.upv.es", "8182", "tcp://tambori.dsic.upv.es:10083"]
+        },
+        {
+            "type": "java",
+            "name": "Controlador",
+            "request": "launch",
+            "mainClass": "dispositivo/dispositivo.controlador.Controlador",
+            "projectName": "dispositivo",
+            "args": ["tcp://tambori.dsic.upv.es:10083"]
         }
     ]
 }
