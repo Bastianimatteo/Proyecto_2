@@ -1,6 +1,8 @@
 package dispositivo.controlador;
 
 import org.eclipse.paho.client.mqttv3.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Controlador implements MqttCallback {
 
@@ -17,8 +19,86 @@ public class Controlador implements MqttCallback {
         Controlador controlador = new Controlador();
         controlador.start(mqttBroker);
 
-        // Publish a message to the topic "test"
-        controlador.publishMessage("test", "Hello, MQTT!");
+        // Start the control loop
+        try {
+            controlador.loopControl();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loopControl() throws InterruptedException{
+        // Control loop logic could go here
+        String topicDispositivo1 = "es/upv/inf/muiinf/ina/dispositivo/ttmi050/funcion";
+        String topicDispositivo2 = "es/upv/inf/muiinf/ina/dispositivo/ttmi051/funcion";
+        String topic;
+
+        // All lights to red
+        turnRed(topicDispositivo1);
+        turnRed(topicDispositivo2);
+        
+        while(true){
+            // Dispositivo 1 to green (on f3 off others) then after 2 seconds to yellow (on f2 off others) then after 2 seconds to red (on f1 off others)
+            turnGreen(topicDispositivo1);
+            Thread.sleep(2000);
+            turnYellow(topicDispositivo1);
+            Thread.sleep(2000);
+            turnRed(topicDispositivo1);
+
+            turnGreen(topicDispositivo2);
+            Thread.sleep(2000);
+            turnYellow(topicDispositivo2);
+            Thread.sleep(2000);
+            turnRed(topicDispositivo2);
+        }
+    }
+
+    private void turnRed(String topic) {
+        JSONObject on = new JSONObject();
+        JSONObject off = new JSONObject();
+        
+        try {
+            on.put("accion", "encender");
+            off.put("accion", "apagar");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        
+        publishMessage(topic + "/f1/comandos", on.toString());
+        publishMessage(topic + "/f2/comandos", off.toString());
+        publishMessage(topic + "/f3/comandos", off.toString());
+    }
+
+    private void turnYellow(String topic) {
+        JSONObject on = new JSONObject();
+        JSONObject off = new JSONObject();
+        
+        try {
+            on.put("accion", "encender");
+            off.put("accion", "apagar");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        
+        publishMessage(topic + "/f1/comandos", off.toString());
+        publishMessage(topic + "/f2/comandos", on.toString());
+        publishMessage(topic + "/f3/comandos", off.toString());
+    }
+
+    private void turnGreen(String topic) {
+        JSONObject on = new JSONObject();
+        JSONObject off = new JSONObject();
+        
+        try {
+            on.put("accion", "encender");
+            off.put("accion", "apagar");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        
+        publishMessage(topic + "/f1/comandos", off.toString());
+        publishMessage(topic + "/f2/comandos", off.toString());
+        publishMessage(topic + "/f3/comandos", on.toString());
     }
 
     public void start(String mqttBroker) {
