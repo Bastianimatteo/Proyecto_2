@@ -32,13 +32,12 @@
             "args": ["ttmi051", "ttmi051.iot.upv.es", "8183", "tcp://tambori.dsic.upv.es:10083", "ttmi050"]
         },
         {
-            "type": "java",
             "name": "Controlador",
+            "type": "python",
             "request": "launch",
-            "mainClass": "dispositivo/dispositivo.controlador.Controlador",
-            "projectName": "dispositivo",
-            "args": ["tcp://tambori.dsic.upv.es:10083"]
-        }
-        // TODO: Add slave config
+            "program": "${workspaceFolder}/src/controlador.py",
+            "console": "integratedTerminal",
+            "args": ["tambori.dsic.upv.es", "10083"]
+          }
     ]
 }
