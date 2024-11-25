@@ -38,6 +38,14 @@
             "program": "${workspaceFolder}/src/controlador.py",
             "console": "integratedTerminal",
             "args": ["tambori.dsic.upv.es", "10083"]
-          }
+        },
+        {
+            "name": "Gestion",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/gestion.py",
+            "console": "integratedTerminal",
+            "args": ["tambori.dsic.upv.es", "10083"]
+        }
     ]
 }
