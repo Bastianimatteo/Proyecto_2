@@ -3,6 +3,7 @@ package dispositivo.iniciador;
 import dispositivo.api.mqtt.FunctionPublisher_APIMQTT;
 import dispositivo.componentes.Dispositivo;
 import dispositivo.componentes.Funcion;
+import dispositivo.componentes.DispositivoSlave;
 import dispositivo.interfaces.FuncionStatus;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
@@ -27,7 +28,7 @@ public class DispositivoIniciador {
 		if (args.length > 4) {
 			// Create device as a salve
 			String masterId = args[4];
-			d = Dispositivo.build(deviceId, deviceIP, Integer.valueOf(port), mqttBroker, masterId);
+			d = DispositivoSlave.build(deviceId, deviceIP, Integer.valueOf(port), mqttBroker, masterId);
 		} else {
 			d = Dispositivo.build(deviceId, deviceIP, Integer.valueOf(port), mqttBroker);
 		}

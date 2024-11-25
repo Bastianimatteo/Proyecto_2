@@ -10,7 +10,7 @@ import dispositivo.api.rest.Dispositivo_APIREST;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
 
-public class Dispositivo implements IDispositivo {
+public class DispositivoSlave implements IDispositivo {
 
 	// inizio codice mio
 	protected Boolean habilitado = true;
@@ -22,27 +22,30 @@ public class Dispositivo implements IDispositivo {
 	protected Dispositivo_APIMQTT apiFuncionesMQTT = null; // interfaccia MQTT per gestire le funzioni del dispositivo
 	protected Dispositivo_APIREST apiFuncionesREST = null; // interfaccia REST per gestire le funzioni del dispositivo
 
-	protected boolean slave = false;
+	protected boolean slave = true;
 	protected String masterId = null;
 	
 	
-	public static Dispositivo build(String deviceId, String ip, String mqttBrokerURL) { // crea un dispositivo con ID, IP, URL del broker MQTT e inizializza le 3 cose in verde
-		Dispositivo dispositivo = new Dispositivo(deviceId);
+	public static DispositivoSlave build(String deviceId, String ip, String mqttBrokerURL, String masterId) { // crea un dispositivo con ID, IP, URL del broker MQTT e inizializza le 3 cose in verde
+		DispositivoSlave dispositivo = new DispositivoSlave(deviceId);
 		dispositivo.registrador = Dispositivo_RegistradorMQTT.build(deviceId, ip, mqttBrokerURL);
 		dispositivo.apiFuncionesMQTT = Dispositivo_APIMQTT.build(dispositivo, mqttBrokerURL);
 		dispositivo.apiFuncionesREST = Dispositivo_APIREST.build(dispositivo);
+        dispositivo.masterId = masterId;
 		return dispositivo;
 	}
 
-	public static Dispositivo build(String deviceId, String ip, int port, String mqttBrokerURL) { // variante che consente di specificare anche la porta per l'API REST
-		Dispositivo dispositivo = new Dispositivo(deviceId);
+	// It would have been better to create a separate class for a slave device since the behavior is different, but I will keep it this way for simplicity since is just a small project
+	public static DispositivoSlave build(String deviceId, String ip, int port, String mqttBrokerURL, String masterId) { // variante che consente di specificare il master da copiare
+		DispositivoSlave dispositivo = new DispositivoSlave(deviceId);
 		dispositivo.registrador = Dispositivo_RegistradorMQTT.build(deviceId, ip, mqttBrokerURL);
 		dispositivo.apiFuncionesMQTT = Dispositivo_APIMQTT.build(dispositivo, mqttBrokerURL);
 		dispositivo.apiFuncionesREST = Dispositivo_APIREST.build(dispositivo, port);
+		dispositivo.masterId = masterId;
 		return dispositivo;
 	}
 
-	protected Dispositivo(String deviceId) { //costruttore che inizializza l'ID del dispositivo
+	protected DispositivoSlave(String deviceId) { //costruttore che inizializza l'ID del dispositivo
 		this.deviceId = deviceId;
 	}
 	

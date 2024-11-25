@@ -175,30 +175,26 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		if ( this.dispositivo == null )
 			return;
 		
-		for(IFuncion f : this.dispositivo.getFunciones())
-			this.subscribe(this.calculateCommandTopic(f)); // calculateCommandTopic(f) è un metodo per calcolare i topic dei comandi per ciascuna funzione
+		try{
+			for(IFuncion f : this.dispositivo.getFunciones())
+				if(this.dispositivo.isSlave())
+					this.subscribe(Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivo.getMasterId() + "/funcion/" + f.getId() + "/info");
+				else
+					this.subscribe(this.calculateCommandTopic(f));
 
-		// inizio codice mio: sottoscrizione al topic dispositivo/{ID}/comandos
-		String dispositivoComandosTopic = Configuracion.TOPIC_BASE + "dispositivo/" + dispositivo.getId() + "/comandos";
-		this.subscribe(dispositivoComandosTopic);
+			// inizio codice mio: sottoscrizione al topic dispositivo/{ID}/comandos
+			String dispositivoComandosTopic;
+			if(this.dispositivo.isSlave())
+				dispositivoComandosTopic = Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivo.getMasterId() + "/comandos";
+			else
+				dispositivoComandosTopic = Configuracion.TOPIC_BASE + "dispositivo/" + dispositivo.getId() + "/comandos";
 
-		// fine codice mio
-	}
-
-	public void iniciarSlave(){
-		if ( this.myClient == null || !this.myClient.isConnected() )
-			this.connect();
-		
-		if ( this.dispositivo == null )
-			return;
-
-		try {
-			this.subscribe(Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivo.getMasterId() + "/funcion/f1/info");
-			this.subscribe(Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivo.getMasterId() + "/funcion/f2/info");
-			this.subscribe(Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivo.getMasterId() + "/funcion/f3/info");
-		} catch (Exception e) {
+			this.subscribe(dispositivoComandosTopic);
+		}catch(Exception e){
 			e.printStackTrace();
 		}
+
+		// fine codice mio
 	}
 
 	public void detener() {
