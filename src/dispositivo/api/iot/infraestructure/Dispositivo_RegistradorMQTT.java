@@ -81,8 +81,7 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 	}
 
-	
-
+	// Ejercicio 12 - Implementar una pequeña 'gestión' / descubrimiento de dispositivos
 	public void connect() {
 		String clientID = this.dispositivoId + UUID.randomUUID().toString();
 		connOpt = new MqttConnectOptions();
@@ -99,7 +98,6 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 			lwJsonObject.put("accion", "registro");
 			lwJsonObject.put("status", "offline");
 		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		connOpt.setWill(lwtTopic, lwJsonObject.toString().getBytes(), 0, false);
@@ -125,7 +123,6 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 		}
 		
 		MySimpleLogger.info(this.loggerId, "Conectado al broker " + this.mqttBroker);
-
 	}
 	
 	
@@ -152,7 +149,6 @@ public class Dispositivo_RegistradorMQTT implements MqttCallback {
 			pubMsg.put("accion", "registro");
 			pubMsg.put("status", "online");
 	   		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		

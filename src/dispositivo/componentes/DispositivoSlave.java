@@ -10,17 +10,16 @@ import dispositivo.api.rest.Dispositivo_APIREST;
 import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
 
+// Ejercicio 11 - Implementar un controlador maestro-esclavos
 public class DispositivoSlave implements IDispositivo {
-
-	// inizio codice mio
-	protected Boolean habilitado = true;
-	// fine codice mio
 	
-	protected String deviceId = null; // id univoco del dispositivo, assegnato in fase di creazione
-	protected Map<String, IFuncion> functions = null; // mappa chd associa l'ID di una funzione a un'istanza di IFuncion
-	protected Dispositivo_RegistradorMQTT registrador = null; // oggetto che si occupa di registrare il dispositivo con un sistema MQTT
-	protected Dispositivo_APIMQTT apiFuncionesMQTT = null; // interfaccia MQTT per gestire le funzioni del dispositivo
-	protected Dispositivo_APIREST apiFuncionesREST = null; // interfaccia REST per gestire le funzioni del dispositivo
+	protected String deviceId = null;
+	protected Map<String, IFuncion> functions = null;
+	protected Dispositivo_RegistradorMQTT registrador = null;
+	protected Dispositivo_APIMQTT apiFuncionesMQTT = null;
+	protected Dispositivo_APIREST apiFuncionesREST = null;
+
+	protected Boolean habilitado = true;
 
 	protected boolean slave = true;
 	protected String masterId = null;

@@ -4,28 +4,24 @@ import paho.mqtt.client as mqtt
 from urllib.parse import urlparse
 
 
-# MQTT Callbacks
+# Ejercicio 13 - Script de gestion de dispositivos
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
     # Subscribe to the topic
     client.subscribe("es/upv/inf/muiinf/ina/gestion/dispositivos")
     print("Subscribed to topic: es/upv/inf/muiinf/ina/gestion/dispositivos")
 
-
-def on_disconnect(client, userdata, rc):
-    print("Disconnected from broker")
-
-
 def on_message(client, userdata, msg):
     try:
         # Parse JSON payload
         payload = json.loads(msg.payload.decode())
         
-        # print(f"Message received. Topic: {msg.topic},\nPayload: {json.dumps(payload, indent=2)}")
-
         print(payload.get("dispositivo") + " is " + payload.get("status"))
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}, Raw message: {msg.payload.decode()}")
+
+def on_disconnect(client, userdata, rc):
+    print("Disconnected from broker")
 
 
 # Function to start the MQTT client

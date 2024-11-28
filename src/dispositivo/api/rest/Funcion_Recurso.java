@@ -55,7 +55,6 @@ public class Funcion_Recurso extends Recurso {
 		
 		// Construimos el mensaje de respuesta
 		// Ejercicio 3 - Codificar Mensaje estado de la función
-		// Hint : en esta clase se ha definido un método estático serialize que puede ser útil
     	JSONObject resultJSON = new JSONObject();
 		resultJSON = Funcion_Recurso.serialize(f);
 		

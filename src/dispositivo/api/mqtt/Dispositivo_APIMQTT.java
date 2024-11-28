@@ -62,7 +62,7 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 	}
 
 	@Override
-	public void messageArrived(String topic, MqttMessage message) throws Exception { // metodo che processa i messaggi ricevuti, decodifica il topic per identificare la funzione del dispositivo coinvolta, interpreta il messaggio come un comando (encender, apagar, parpadear) ed esegue l'azione corrispondente
+	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		
 		String payload = new String(message.getPayload());
 		
@@ -212,6 +212,7 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 		return Configuracion.TOPIC_BASE + "dispositivo/" + dispositivo.getId() + "/funcion/" + f.getId() + "/info";
 	}
 	
+	// Ejericio 8 - Implementar funciones habilitar/deshabilitar dispositivo
 	private void handleDeviceCommand(String topic, String payload){		
 		//
 		// Definimos una API con mensajes de acciones básicos
@@ -234,11 +235,13 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 				this.dispositivo.deshabilita();
 				break;
 			default:
-				MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
+				MySimpleLogger.warn(this.loggerId, 
+				"Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
 				break;
 		}
 	}
 
+	// Ejericio 7 - Implementar funciones encender/apagar/parpadear
 	private void handleFunctionCommand(String topic, String payload){
 		String[] topicNiveles = topic.split("/");
 		String funcionId = topicNiveles[topicNiveles.length-2];
@@ -273,11 +276,13 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 				f.parpadear();
 				break;
 			default:
-				MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
+				MySimpleLogger.warn(this.loggerId, 
+				"Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
 				break;
 		}
 	}
 
+	// Ejercicio 11 - Implementar funciones encender/apagar/parpadear para dispositivos esclavos
 	private void handleFunctionCommandSlave(String topic, String payload){
 		String[] topicNiveles = topic.split("/");
 		String funcionId = topicNiveles[topicNiveles.length-2];
@@ -312,7 +317,8 @@ public class Dispositivo_APIMQTT implements MqttCallback {
 				f.parpadear();
 				break;
 			default:
-				MySimpleLogger.warn(this.loggerId, "Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
+				MySimpleLogger.warn(this.loggerId, 
+				"Acción '" + payload + "' no reconocida. Sólo admitidas: encender, apagar o parpadear");
 				break;
 		}
 	}

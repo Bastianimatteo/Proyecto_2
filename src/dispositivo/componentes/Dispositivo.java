@@ -11,16 +11,15 @@ import dispositivo.interfaces.IDispositivo;
 import dispositivo.interfaces.IFuncion;
 
 public class Dispositivo implements IDispositivo {
-
-	// inizio codice mio
-	protected Boolean habilitado = true;
-	// fine codice mio
 	
 	protected String deviceId = null; // id univoco del dispositivo, assegnato in fase di creazione
 	protected Map<String, IFuncion> functions = null; // mappa chd associa l'ID di una funzione a un'istanza di IFuncion
 	protected Dispositivo_RegistradorMQTT registrador = null; // oggetto che si occupa di registrare il dispositivo con un sistema MQTT
 	protected Dispositivo_APIMQTT apiFuncionesMQTT = null; // interfaccia MQTT per gestire le funzioni del dispositivo
 	protected Dispositivo_APIREST apiFuncionesREST = null; // interfaccia REST per gestire le funzioni del dispositivo
+
+	// Ejercicio 4 - Habilitar y deshabilitar dispositivo
+	protected Boolean habilitado = true;
 
 	protected boolean slave = false;
 	protected String masterId = null;
@@ -120,7 +119,7 @@ public class Dispositivo implements IDispositivo {
 		return this;
 	}
 
-	// Ejercicio 4
+	// Ejercicio 4 - Habilitar y deshabilitar dispositivo
 	@Override
 	public Boolean estaHabilitado(){
 		return this.habilitado;

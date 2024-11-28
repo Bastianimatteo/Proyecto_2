@@ -69,7 +69,7 @@ public class Funcion implements IFuncion {
 	}
 
 	@Override
-	public IFuncion parpadear() { // imposta la funzione in modalità BLINK verificando prima se è abilitata
+	public IFuncion parpadear() {
 		if ( !this.estaHabilitada() ) {
 			MySimpleLogger.warn(this.loggerId, "Funcion deshabilitada, no se puede modificar");
 			return this;
@@ -122,8 +122,6 @@ public class Funcion implements IFuncion {
 		return this;
 	}
 	
-	// inizio codice mio
-
 	@Override
 	public Boolean estaHabilitada() {
 		// Ejercicio 4
@@ -144,11 +142,8 @@ public class Funcion implements IFuncion {
 		return this;
 	}
 
-	// fine codice mio
-
-
-	protected void publishStatusChange() { // notifica push quando lo stato della funziona cambia
-		// Ejercicio 9 - Implementar notificaciones 'push'
+	// Ejercicio 9 - Implementar notificaciones 'push'
+	protected void publishStatusChange() {
 		JSONObject message = new JSONObject();
 		try{
 			message.put("estado", this.status.toString());

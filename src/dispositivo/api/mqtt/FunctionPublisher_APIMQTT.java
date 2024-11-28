@@ -19,7 +19,8 @@ import dispositivo.interfaces.Configuracion;
 import dispositivo.utils.MySimpleLogger;
 
 /**
- * This class is responsible for publishing the state of the functions of a device to an MQTT broker.
+ * This class is responsible for publishing the state 
+ * of the functions of a device to an MQTT broker.
  */
 public class FunctionPublisher_APIMQTT {
     protected MqttClient myClient;
@@ -56,7 +57,6 @@ public class FunctionPublisher_APIMQTT {
 	}
 
     public void connect() {
-
 		// setup MQTT Client
 		String clientID = this.dispositivoId + UUID.randomUUID().toString();
 		connOpt = new MqttConnectOptions();
@@ -96,8 +96,11 @@ public class FunctionPublisher_APIMQTT {
 		}
 	}
 
+	// Ejercicio 9 - Implementar notificaciones 'push' sobre funciones
     public void publish(String functionId, JSONObject message) {
-		String topic = Configuracion.TOPIC_BASE + "dispositivo/" + this.dispositivoId + "/funcion/" + functionId + "/info";
+		String topic = Configuracion.TOPIC_BASE
+					+ "dispositivo/" + this.dispositivoId 
+					+ "/funcion/" + functionId + "/info";
 		MqttTopic mqttTopic = myClient.getTopic(topic);
 		
    		int pubQoS = 0;

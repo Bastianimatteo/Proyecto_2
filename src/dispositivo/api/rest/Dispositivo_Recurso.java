@@ -68,11 +68,11 @@ public class Dispositivo_Recurso extends Recurso {
     }
     
 	@Put
-	public Representation put(Representation entity) { // gestisce le richieste PUT
+	public Representation put(Representation entity) {
 
     	// Obtenemos la función indicada como parámetro en la Ruta
 
-		IDispositivo d = this.getDispositivo(); // ottiene istanza del dispositivo corrente
+		IDispositivo d = this.getDispositivo();
 		if ( d == null ) {
 			return generateResponseWithErrorCode(Status.CLIENT_ERROR_NOT_FOUND);
 		}
@@ -80,7 +80,7 @@ public class Dispositivo_Recurso extends Recurso {
 		// Dispositivo encontrado
 		JSONObject payload;
 		String accion;
-		try { // legge il corpo della richiesta e recupera il campo accion
+		try {
 			payload = new JSONObject(entity.getText());	
 			accion = payload.getString("accion");		
 		} catch (JSONException | IOException e) {
@@ -96,7 +96,8 @@ public class Dispositivo_Recurso extends Recurso {
 				d.deshabilita();
 				break;
 			default:
-				MySimpleLogger.warn("Dispositivo-Recurso", "Acción '" + payload + "' no reconocida. Sólo admitidas: habilitar o deshabilitar");
+				MySimpleLogger.warn("Dispositivo-Recurso", 
+				"Acción '" + payload + "' no reconocida. Sólo admitidas: habilitar o deshabilitar");
 				return this.generateResponseWithErrorCode(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
 		
